@@ -4,7 +4,7 @@
     {
         private SupervisoryLevel _Level;
         private string _Title;
-        private string _Years;
+        private int _Years;
 
         // summary
         // Properties are associated with a single piece of data
@@ -29,5 +29,43 @@
                 _Title = value;
             }
         }
+
+        public SupervisoryLevel Level
+        {
+            get { return _Level; }
+            private set 
+            { // private set means that the property can only be set by code within the class. This helps to increase security as it won't allow a standard user to change the information.
+                // to validate and test enums you make use of the following, where xx is the datatype:  Enum.IsDefined(typeof(xx), value)
+                if (!Enum.IsDefined(typeof(SupervisoryLevel), value))
+                {
+                    throw new ArgumentException($"Supervisory Level is invalid: {value}.");
+                }
+                _Level = value;
+            }
+        }
+
+        public int Years
+        {
+            get { return _Years; }
+            set
+            {
+                // validate for a positive value
+                if (value < 0)
+                {
+                    throw new ArgumentOutOfRangeException("value");
+                }
+                // second way to validate
+                /*
+                if (!Utilities.IsZeroOrPositive(value))
+                {
+                    throw new ArgumentOutOfRangeException("value");
+                }
+                */
+                _Years = value;
+            }
+        }
+
+        // auto-implemented property
+        public DateTime StartDate { get; private set; }
     }
 }
