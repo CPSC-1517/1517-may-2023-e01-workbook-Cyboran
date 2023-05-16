@@ -82,13 +82,13 @@
         {
             Title = title;
             Level = level;
-            StartDate = start;
             Years = years;
 
             if (start >= DateTime.Today.AddDays(1))
             {
                 throw new ArgumentException($"The start date {start} is invalid, as it is in the future.");
             }
+            StartDate = start;
         }
     }
 }
