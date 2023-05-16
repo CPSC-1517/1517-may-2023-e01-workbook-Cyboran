@@ -67,5 +67,28 @@
 
         // auto-implemented property
         public DateTime StartDate { get; private set; }
+
+        // default constructor
+        public Employment()
+        {
+            // default values
+            Title = "Unknown";
+            Level = SupervisoryLevel.TeamMember;
+            StartDate = DateTime.Today;
+        }
+
+        // greedy constructor
+        public Employment(string title, int years, SupervisoryLevel level, DateTime start)
+        {
+            Title = title;
+            Level = level;
+            StartDate = start;
+            Years = years;
+
+            if (start >= DateTime.Today.AddDays(1))
+            {
+                throw new ArgumentException($"The start date {start} is invalid, as it is in the future.");
+            }
+        }
     }
 }
