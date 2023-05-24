@@ -1,4 +1,4 @@
-﻿namespace ClassLibraryMay15
+﻿namespace OOPsReview
 {
     public class Employment
     {
@@ -61,7 +61,10 @@
                 {
                     throw new ArgumentOutOfRangeException(value.ToString());
                 }
-                _Years = value;
+                else
+                {
+                    _Years = value;
+                }
             }
         }
 
@@ -78,7 +81,7 @@
         }
 
         // greedy constructor
-        public Employment(string title, double years, SupervisoryLevel level, DateTime start)
+        public Employment(string title, SupervisoryLevel level, DateTime start, double years = 0)
         {
             Title = title;
             Level = level;
@@ -107,6 +110,7 @@
         }
         public void CorrectStartDate(DateTime start)
         {
+            // validation for start date
             if (start >= DateTime.Today.AddDays(1))
             {
                 throw new ArgumentException($"The start date {start} is invalid, as it is in the future.");
