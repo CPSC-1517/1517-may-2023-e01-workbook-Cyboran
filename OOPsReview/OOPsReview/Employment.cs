@@ -22,7 +22,7 @@
             // mutator
             set
             {
-                if (string.IsNullOrEmpty(value))
+                if (string.IsNullOrWhiteSpace(value))
                 {
                     throw new ArgumentNullException("Title is required.");
                 }
