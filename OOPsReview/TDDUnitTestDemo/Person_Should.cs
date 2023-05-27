@@ -12,11 +12,29 @@ namespace TDDUnitTestDemo
             // arrange (setup)
             string fName = "Rion";
             string lName = "Murphy";
+            Residence address = new Residence(20, "Catalina Court", "Fort Sasketchewan", "AB", "T8L0E9");
+            string expectedAdd = "20,Catalina Court,Fort Sasketchewan,AB,T8L0E9";
             // act (execution)
-            Person person = new Person(fName, lName);
+            Person person = new Person(fName, lName, address, null);
             // assert (testing of action)
             person.FirstName.Should().Be(fName);
             person.LastName.Should().Be(lName);
+            person.Address.ToString().Should().Be(expectedAdd);
+            person.EmploymentPositions.Count().Should().Be(0);
+        }
+
+        [Fact]
+        public void Create_Instance_With_Default_Constructor()
+        {
+            // arrange (setup)
+
+            // act (execution)
+            Person person = new Person();
+            // assert (testing of action)
+            person.FirstName.Should().BeNull();
+            person.LastName.Should().BeNull();
+            person.Address.Should().BeNull();
+            person.EmploymentPositions.Count().Should().Be(0);
         }
     }
 }
