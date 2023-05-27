@@ -56,7 +56,7 @@ namespace OOPsReview
             */
         }
         public Residence Address { get; set; }
-        public List<Employment> EmploymentPositions { get; set; } = new List<Employment>();
+        public List<Employment> EmploymentPositions { get; set; } = new List<Employment>(); // creates a new instance so that there is no invalid null entries
         public Person(string fName, string lName, Residence address, List<Employment> employmentPositions) 
         { // greedy constructor
             FirstName = fName;
@@ -66,12 +66,6 @@ namespace OOPsReview
             {
                 EmploymentPositions = employmentPositions;
             }
-            /*
-            else
-            {
-                EmploymentPositions = new List<Employment>();
-            }
-            */
         }
         public Person()
         { // default constructor
