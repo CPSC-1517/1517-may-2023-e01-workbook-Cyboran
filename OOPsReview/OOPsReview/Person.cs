@@ -12,12 +12,12 @@ namespace OOPsReview
      *      private string FirstName
      *      private string LastName
      * Properties
-     *      public ResidentAddress Address {get; set;}
+     *      public Residence Address {get; set;}
      *      public List<Employment> EmploymentPositions {get; set;}
      *      public string FirstName {get; set;}
-     *      public string FullName {get;}
+     *      public string FullName {get;} ??
      *      public string LastName {get; set;}
-     *      public int NumberOfEmployments {get;}
+     *      public int NumberOfEmployments {get;} ??
      * Methods
      *      public void AddEmployment(Employment employment)
      *      public void ChangeName(string firstName, string lastName)
@@ -59,6 +59,14 @@ namespace OOPsReview
         public List<Employment> EmploymentPositions { get; set; } = new List<Employment>(); // creates a new instance so that there is no invalid null entries
         public Person(string fName, string lName, Residence address, List<Employment> employmentPositions) 
         { // greedy constructor
+            if (string.IsNullOrEmpty(fName))
+            {
+                throw new ArgumentNullException(nameof(fName), "The first name is required.");
+            }
+            if (string.IsNullOrEmpty(lName))
+            {
+                throw new ArgumentNullException(nameof(lName), "The last name is required.");
+            }
             FirstName = fName;
             LastName = lName;
             Address = address;
@@ -69,6 +77,8 @@ namespace OOPsReview
         }
         public Person()
         { // default constructor
+            FirstName = "unknown";
+            LastName = "unknown";
         }
     }
 }
