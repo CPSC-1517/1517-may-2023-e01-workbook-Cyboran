@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using OOPsReview;
 
 namespace OOPsReview
@@ -30,43 +31,39 @@ namespace OOPsReview
         private string _LastName;
         
         public string FirstName 
-        { get; set;
-            /*
+        { //get; set;
             get
             {
                 return _FirstName;
             } 
             set
             {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    throw new ArgumentNullException("The first name is required.");
+                }
                 _FirstName = value;
-            } 
-            */
+            }
         }
         public string LastName
-        { get; set;
-            /*
+        { //get; set;
             get
             {
                 return _LastName;
             }
             set
             {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    throw new ArgumentNullException("The last name is required.");
+                }
                 _LastName = value;
             }
-            */
         }
         public Residence Address { get; set; }
         public List<Employment> EmploymentPositions { get; set; } = new List<Employment>(); // creates a new instance so that there is no invalid null entries
         public Person(string fName, string lName, Residence address, List<Employment> employmentPositions) 
         { // greedy constructor
-            if (string.IsNullOrEmpty(fName))
-            {
-                throw new ArgumentNullException(nameof(fName), "The first name is required.");
-            }
-            if (string.IsNullOrEmpty(lName))
-            {
-                throw new ArgumentNullException(nameof(lName), "The last name is required.");
-            }
             FirstName = fName;
             LastName = lName;
             Address = address;

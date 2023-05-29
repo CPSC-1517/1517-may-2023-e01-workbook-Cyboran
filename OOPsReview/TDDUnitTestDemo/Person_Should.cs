@@ -34,8 +34,8 @@ namespace TDDUnitTestDemo
             // act (execution)
             Person person = new Person();
             // assert (testing of action)
-            person.FirstName.Should().BeNull(expectedFirstName);
-            person.LastName.Should().BeNull(expectedLastName);
+            person.FirstName.Should().Be(expectedFirstName);
+            person.LastName.Should().Be(expectedLastName);
             person.Address.Should().BeNull();
             person.EmploymentPositions.Count().Should().Be(0);
         }
@@ -98,21 +98,37 @@ namespace TDDUnitTestDemo
         [InlineData(null)]
         [InlineData("")]
         [InlineData("    ")]
-        /*
-        public void Throw_Exception_When_Setting_FirstName_To_Missing_Data(string fName)
+        public void Throw_Exception_When_Setting_FirstName_To_Missing_Data(string changeName)
         {
             // arrange (setup)
+            string fName = "Rion";
             string lName = "Murphy";
             Residence address = new Residence(20, "Catalina Court", "Fort Sasketchewan", "AB", "T8L0E9");
             string expectedAdd = "20,Catalina Court,Fort Sasketchewan,AB,T8L0E9";
-            Person me = new Person("unknown", lName, address, null);
-            string expectedfName = "unknown";
+            Person me = new Person(fName, lName, address, null);
             // act (execution)
-            Action action = () => new Person(fName, lName, address, null);
+            Action action = () => me.FirstName = changeName;
             // assert (testing of action)
             action.Should().Throw<ArgumentNullException>();
         }
-        */
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("    ")]
+        public void Throw_Exception_When_Setting_LastName_To_Missing_Data(string changeName)
+        {
+            // arrange (setup)
+            string fName = "Rion";
+            string lName = "Murphy";
+            Residence address = new Residence(20, "Catalina Court", "Fort Sasketchewan", "AB", "T8L0E9");
+            string expectedAdd = "20,Catalina Court,Fort Sasketchewan,AB,T8L0E9";
+            Person me = new Person(fName, lName, address, null);
+            // act (execution)
+            Action action = () => me.LastName = changeName;
+            // assert (testing of action)
+            action.Should().Throw<ArgumentNullException>();
+        }
 
         #endregion
     }
