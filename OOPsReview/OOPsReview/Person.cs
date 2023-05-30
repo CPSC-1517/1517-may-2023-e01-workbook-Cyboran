@@ -62,6 +62,16 @@ namespace OOPsReview
         }
         public Residence Address { get; set; }
         public List<Employment> EmploymentPositions { get; set; } = new List<Employment>(); // creates a new instance so that there is no invalid null entries
+        // methods
+        public void AddEmployment(Employment employment)
+        {
+
+        }
+        public void ChangeName(string newFirstName, string newLastName)
+        {
+            FirstName = newFirstName;
+            LastName = newLastName;
+        }
         public Person(string fName, string lName, Residence address, List<Employment> employmentPositions) 
         { // greedy constructor
             FirstName = fName;

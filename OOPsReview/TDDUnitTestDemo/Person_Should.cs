@@ -72,17 +72,35 @@ namespace TDDUnitTestDemo
             me.LastName.Should().Be(expectedlName);
         }
 
+        [Fact]
+        public void Create_FullName_To_New_Name()
+        {
+            // arrange (setup)
+            string fName = "Rion";
+            string lName = "Murphy";
+            Residence address = new Residence(20, "Catalina Court", "Fort Sasketchewan", "AB", "T8L0E9");
+            string expectedAdd = "20,Catalina Court,Fort Sasketchewan,AB,T8L0E9";
+            Person me = new Person(fName, lName, address, null);
+            string expectedfName = "Tiyna";
+            string expectedlName = "Cloudwalker";
+            // act (execution)
+            me.ChangeName(expectedfName, expectedlName);
+            // assert (testing of action)
+            me.FirstName.Should().Be(expectedfName);
+            me.LastName.Should().Be(expectedlName);
+        }
+
         #endregion
 
         #region Invalid Data
 
         [Theory]
-        [InlineData(null,"Murphy")]
+        [InlineData(null, "Murphy")]
+        [InlineData("", "Murphy")]
+        [InlineData("    ", "Murphy")]
         [InlineData("Rion", null)]
-        [InlineData(null, "")]
-        [InlineData("", null)]
-        [InlineData(null, "    ")]
-        [InlineData("    ", null)]
+        [InlineData("Rion", "")]
+        [InlineData("Rion", "    ")]
         public void Create_Greedy_Instance_With_no_Name_Throw_Exception(string fName, string lName)
         {
             // arrange (setup)
@@ -126,6 +144,27 @@ namespace TDDUnitTestDemo
             Person me = new Person(fName, lName, address, null);
             // act (execution)
             Action action = () => me.LastName = changeName;
+            // assert (testing of action)
+            action.Should().Throw<ArgumentNullException>();
+        }
+
+        [Theory]
+        [InlineData(null, "Murphy")]
+        [InlineData("", "Murphy")]
+        [InlineData("    ", "Murphy")]
+        [InlineData("Rion", null)]
+        [InlineData("Rion", "")]
+        [InlineData("Rion", "    ")]
+        public void Throw_Exception_Change_FullName_With_Missing_Data(string changeFirstName, string changeLastName)
+        {
+            // arrange (setup)
+            string fName = "Rion";
+            string lName = "Murphy";
+            Residence address = new Residence(20, "Catalina Court", "Fort Sasketchewan", "AB", "T8L0E9");
+            string expectedAdd = "20,Catalina Court,Fort Sasketchewan,AB,T8L0E9";
+            Person me = new Person(fName, lName, address, null);
+            // act (execution)
+            Action action = () => me.ChangeName(changeFirstName, changeLastName);
             // assert (testing of action)
             action.Should().Throw<ArgumentNullException>();
         }
