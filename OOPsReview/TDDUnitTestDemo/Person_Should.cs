@@ -1,11 +1,21 @@
 using FluentAssertions;
 using OOPsReview;
 using System.Xml.Linq;
+using Xunit.Sdk;
 
 namespace TDDUnitTestDemo
 {
     public class Person_Should
     {
+        public Person Make_Test_Instance()
+        {
+            string fName = "Rion";
+            string lName = "Murphy";
+            Residence address = new Residence(20, "Catalina Court", "Fort Sasketchewan", "AB", "T8L0E9");
+            Person me = new Person(fName, lName, address, null);
+
+            return me;
+        }
         // attribute titles - Fact is a title that does only one test and is usually setup and coded within the test. Theory is a title that allows for multiple tests using multiple data streams applied to the same test by making use of InlineData.
         #region Valid Data
         [Fact]
@@ -44,11 +54,7 @@ namespace TDDUnitTestDemo
         public void Create_FirstName_To_New_Name()
         {
             // arrange (setup)
-            string fName = "Rion";
-            string lName = "Murphy";
-            Residence address = new Residence(20, "Catalina Court", "Fort Sasketchewan", "AB", "T8L0E9");
-            string expectedAdd = "20,Catalina Court,Fort Sasketchewan,AB,T8L0E9";
-            Person me = new Person(fName, lName, address, null);
+            Person me = Make_Test_Instance();
             string expectedfName = "Tiyna";
             // act (execution)
             me.FirstName = expectedfName;
@@ -60,11 +66,7 @@ namespace TDDUnitTestDemo
         public void Create_LastName_To_New_Name()
         {
             // arrange (setup)
-            string fName = "Rion";
-            string lName = "Murphy";
-            Residence address = new Residence(20, "Catalina Court", "Fort Sasketchewan", "AB", "T8L0E9");
-            string expectedAdd = "20,Catalina Court,Fort Sasketchewan,AB,T8L0E9";
-            Person me = new Person(fName, lName, address, null);
+            Person me = Make_Test_Instance();
             string expectedlName = "Cloudwalker";
             // act (execution)
             me.LastName = expectedlName;
@@ -76,11 +78,7 @@ namespace TDDUnitTestDemo
         public void Create_FullName_To_New_Name()
         {
             // arrange (setup)
-            string fName = "Rion";
-            string lName = "Murphy";
-            Residence address = new Residence(20, "Catalina Court", "Fort Sasketchewan", "AB", "T8L0E9");
-            string expectedAdd = "20,Catalina Court,Fort Sasketchewan,AB,T8L0E9";
-            Person me = new Person(fName, lName, address, null);
+            Person me = Make_Test_Instance();
             string expectedfName = "Tiyna";
             string expectedlName = "Cloudwalker";
             // act (execution)
@@ -88,6 +86,73 @@ namespace TDDUnitTestDemo
             // assert (testing of action)
             me.FirstName.Should().Be(expectedfName);
             me.LastName.Should().Be(expectedlName);
+        }
+
+        [Fact]
+        public void Return_FullName()
+        {
+            // arrange (setup)
+            Person me = Make_Test_Instance();
+            // act (execution)
+            string fullName = me.LastName + "," + me.FirstName;
+            // assert (testing of action)
+            me.FullName.Should().Be(fullName);
+        }
+
+        [Fact]
+        public void Return_Number_Of_Employment_Instances()
+        {
+            // arrange (setup)
+            Person me = Make_Test_Instance();
+            // act (execution)
+            int count = me.NumberOfEmployments;
+            // assert (testing of action)
+            count.Should().Be(0);
+        }
+
+        [Fact]
+        public void Add_First_Employment_Instance()
+        {
+            // arrange (setup)
+            Person me = Make_Test_Instance();
+            int expectedResult = 1;
+            Employment employment = new Employment("TDD Lead", SupervisoryLevel.TeamMember, new DateTime(2018,03,10));
+            // act (execution)
+            me.AddEmployment(employment);
+            // assert (testing of action)
+            me.NumberOfEmployments.Should().Be(expectedResult);
+            me.EmploymentPositions[0].ToString().Should().Be(employment.ToString());
+        }
+
+        [Fact]
+        public void Add_Multiple_Employment_Instances()
+        {
+            // arrange (setup)
+            int expectedResult = 4;
+            List<Employment> employments = new List<Employment>();
+            Employment emp1 = new Employment("TDD Member", SupervisoryLevel.TeamMember, new DateTime(2018, 03, 10));
+            Employment emp2 = new Employment("TDD Lead", SupervisoryLevel.TeamLeader, new DateTime(2016, 03, 10));
+            Employment emp3 = new Employment("TDD Department Head", SupervisoryLevel.DepartmentHead, new DateTime(2020, 03, 10));
+            employments.Add(emp1);
+            employments.Add(emp2);
+            employments.Add(emp3);
+            string fName = "Rion";
+            string lName = "Murphy";
+            Residence address = new Residence(20, "Catalina Court", "Fort Sasketchewan", "AB", "T8L0E9");
+            Person me = new Person(fName, lName, address, employments);
+            Employment employment = new Employment("TDD Owner", SupervisoryLevel.Owner, new DateTime(2015, 03, 10));
+            List<Employment> expectedEmp = new List<Employment>()
+            {
+                emp1,
+                emp2,
+                emp3,
+                employment
+            };
+            // act (execution)
+            me.AddEmployment(employment);
+            // assert (testing of action)
+            me.NumberOfEmployments.Should().Be(expectedResult);
+            me.EmploymentPositions.Should().ContainInConsecutiveOrder(expectedEmp);
         }
 
         #endregion
@@ -119,11 +184,7 @@ namespace TDDUnitTestDemo
         public void Throw_Exception_When_Setting_FirstName_To_Missing_Data(string changeName)
         {
             // arrange (setup)
-            string fName = "Rion";
-            string lName = "Murphy";
-            Residence address = new Residence(20, "Catalina Court", "Fort Sasketchewan", "AB", "T8L0E9");
-            string expectedAdd = "20,Catalina Court,Fort Sasketchewan,AB,T8L0E9";
-            Person me = new Person(fName, lName, address, null);
+            Person me = Make_Test_Instance();
             // act (execution)
             Action action = () => me.FirstName = changeName;
             // assert (testing of action)
@@ -137,11 +198,7 @@ namespace TDDUnitTestDemo
         public void Throw_Exception_When_Setting_LastName_To_Missing_Data(string changeName)
         {
             // arrange (setup)
-            string fName = "Rion";
-            string lName = "Murphy";
-            Residence address = new Residence(20, "Catalina Court", "Fort Sasketchewan", "AB", "T8L0E9");
-            string expectedAdd = "20,Catalina Court,Fort Sasketchewan,AB,T8L0E9";
-            Person me = new Person(fName, lName, address, null);
+            Person me = Make_Test_Instance();
             // act (execution)
             Action action = () => me.LastName = changeName;
             // assert (testing of action)
@@ -158,13 +215,20 @@ namespace TDDUnitTestDemo
         public void Throw_Exception_Change_FullName_With_Missing_Data(string changeFirstName, string changeLastName)
         {
             // arrange (setup)
-            string fName = "Rion";
-            string lName = "Murphy";
-            Residence address = new Residence(20, "Catalina Court", "Fort Sasketchewan", "AB", "T8L0E9");
-            string expectedAdd = "20,Catalina Court,Fort Sasketchewan,AB,T8L0E9";
-            Person me = new Person(fName, lName, address, null);
+            Person me = Make_Test_Instance();
             // act (execution)
             Action action = () => me.ChangeName(changeFirstName, changeLastName);
+            // assert (testing of action)
+            action.Should().Throw<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void Throw_Exception_Add_First_Employment_Instance()
+        {
+            // arrange (setup)
+            Person me = Make_Test_Instance();
+            // act (execution)
+            Action action = () => me.AddEmployment(null);
             // assert (testing of action)
             action.Should().Throw<ArgumentNullException>();
         }

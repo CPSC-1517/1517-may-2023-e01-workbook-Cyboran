@@ -60,12 +60,30 @@ namespace OOPsReview
                 _LastName = value;
             }
         }
+        public string FullName
+        {
+            get
+            {
+                return LastName + "," + FirstName;
+            }
+        }
         public Residence Address { get; set; }
         public List<Employment> EmploymentPositions { get; set; } = new List<Employment>(); // creates a new instance so that there is no invalid null entries
+        public int NumberOfEmployments
+        {
+            get
+            {
+                return EmploymentPositions.Count;
+            }
+        }
         // methods
         public void AddEmployment(Employment employment)
         {
-
+            if (employment == null)
+            {
+                throw new ArgumentNullException("Invalid Entry, Employment is empty or null. Please correct and retry.");
+            }
+            EmploymentPositions.Add(employment);
         }
         public void ChangeName(string newFirstName, string newLastName)
         {
