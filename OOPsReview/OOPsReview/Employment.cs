@@ -125,7 +125,49 @@
         }
         public override string ToString()
         {
-            return $"{Title},{Level},{StartDate.ToString("MMM dd, yyyy")},{Years}";
+            return $"{Title},{Level},{StartDate.ToString("MMM dd yyyy")},{Years}";
+        }
+        public static Employment Parse(string text)
+        {
+            string[] pieces = text.Split(',');
+            if (pieces.Length != 4)
+            {
+                throw new FormatException($"Error in {text}. Format not expected.");
+            }
+
+            return new Employment(pieces[0], 
+                (SupervisoryLevel)Enum.Parse(typeof(SupervisoryLevel), pieces[1]), 
+                DateTime.Parse(pieces[2]), 
+                double.Parse(pieces[3]));
+        }
+        public static bool TryParse(string text, out Employment emp)
+        {
+            bool result = true;
+            emp = null;
+
+            try
+            {
+                emp = Parse(text);
+            }
+            catch (FormatException ex)
+            {
+                result = false;
+            }
+
+            // alternative code
+            /*
+            result = false;
+            if (string.IsNullOrEmpty(text))
+            {
+                throw new ArgumentNullException("Invalid entry. Please check input and try again.");
+            }
+            emp = null;
+            emp = Parse(text);
+
+            return true;
+            */
+
+            return result;
         }
     }
 }

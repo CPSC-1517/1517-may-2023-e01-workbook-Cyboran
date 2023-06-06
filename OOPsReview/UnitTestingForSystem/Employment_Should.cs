@@ -175,14 +175,50 @@ namespace UnitTestingForSystem
             TimeSpan days = DateTime.Today - StartDate;
             double Years = Math.Round((days.Days / 365.2), 1);
             Employment sut = new Employment(Title, Level, StartDate, Years);
-            string expectedCSV = $"SAS Lead,TeamLeader,Oct. 24, 2020,{Years}";
+            string expectedCSV = $"SAS Lead,TeamLeader,Oct. 24 2020,{Years}";
 
             //When - Act execution
             string actual = sut.ToString();
 
             //Then - Assert check
             actual.Should().Be(expectedCSV);
-            
+
+        }
+
+        [Fact]
+        public void Parse_A_String_Into_Employment_Instance()
+        {
+            // arrange (setup)
+            DateTime StartDate = new DateTime(2020, 10, 24);
+            TimeSpan days = DateTime.Today - StartDate;
+            double Years = Math.Round((days.Days / 365.2), 1);
+            string dataRecord = $"SAS Lead,TeamLeader,Oct. 24 2020,{Years}\n";
+            string expectedCSV = $"SAS Lead,TeamLeader,Oct. 24 2020,{Years}";
+
+            // act (execution)
+            Employment actual = Employment.Parse(dataRecord);
+
+            // assert (testing of action)
+            actual.ToString().Should().Be(expectedCSV);
+        }
+
+        [Fact]
+        public void TryParse_A_String_Into_Employment_Instance()
+        {
+            // arrange (setup)
+            DateTime StartDate = new DateTime(2020, 10, 24);
+            TimeSpan days = DateTime.Today - StartDate;
+            double Years = Math.Round((days.Days / 365.2), 1);
+            string dataRecord = $"SAS Lead,TeamLeader,Oct. 24 2020,{Years}\n";
+            string expectedCSV = $"SAS Lead,TeamLeader,Oct. 24 2020,{Years}";
+            Employment actual = null;
+
+            // act (execution)
+            bool valid = Employment.TryParse(dataRecord, out actual);
+
+            // assert (testing of action)
+            actual.ToString().Should().Be(expectedCSV);
+            valid.Should().BeTrue();
         }
         #endregion
 
@@ -244,7 +280,7 @@ namespace UnitTestingForSystem
         [InlineData(null)]
         [InlineData("")]
         [InlineData("      ")]
-        public void Directly_Change_Title_Throws__Exception(string title)
+        public void Directly_Change_Title_Throws_Exception(string title)
         {
             //Where - Arrangement setup
             string Title = "SAS Lead";
@@ -315,6 +351,38 @@ namespace UnitTestingForSystem
             //Then - Assert check
             action.Should().Throw<ArgumentException>().WithMessage("*future*");
 
+        }
+
+        [Theory]
+        [InlineData("SAS LeadTeamLeader,Oct. 24 2020,2.8\n")] // not enough parts
+        [InlineData("SAS Lead,TeamLeader,Oct. 24 2020,2.8,extra field\n")] // too many parts
+        public void Throw_Exception_Parse_A_String_Into_Employment_Instance(string dataRecord)
+        {
+            // arrange (setup)
+            Employment actual = null;
+
+            // act (execution)
+            Action action = () => actual = Employment.Parse(dataRecord);
+
+            // assert (testing of action)
+            action.Should().Throw<FormatException>().WithMessage("*Format not expected*");
+        }
+
+        [Theory]
+        [InlineData(@"SAS LeadTeamLeader,Oct. 24 2020,2.8\n")] // not enough parts
+        [InlineData(@"SAS Lead,TeamLeader,Oct. 24 2020,2.8,extra field\n")] // too many parts
+        public void Throw_Exception_TryParse_A_String_Into_Employment_Instance(string dataRecord)
+        {
+            // arrange (setup)
+            Employment actual = null;
+            bool valid = false;
+
+            // act (execution)
+            valid = Employment.TryParse(dataRecord, out actual);
+
+            // assert (testing of action)
+            valid.Should().BeFalse();
+            actual.Should().BeNull();
         }
         #endregion
     }
