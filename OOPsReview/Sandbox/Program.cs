@@ -96,6 +96,8 @@ void FileIOCSV()
 
     List<Employment> empRead = new List <Employment>();
     empRead = ReadEmploymentCollectionFromCSV();
+
+    DumpEmployments(empRead);
 }
 void DumpEmployments(List<Employment> emp)
 {
@@ -126,16 +128,42 @@ List<Employment> ReadEmploymentCollectionFromCSV()
     // filepath: C:\Temp\EmploymentData.txt
     string filePath = @"C:\Temp\EmploymentData.txt";
     Employment empInstance = null;
-
-    string[] empCSVString = File.ReadAllLines(filePath);
-
-    // convert array into employment instances
-
     List<Employment> empCollection = new List<Employment>();
-    foreach (string line in empCSVString)
+
+    try
     {
-        empInstance = Employment.Parse(line);
-        empCollection.Add(empInstance);
+        string[] empCSVString = File.ReadAllLines(filePath);
+
+        // convert array into employment instances
+
+        foreach (string line in empCSVString)
+        {
+            try
+            {
+                empInstance = Employment.Parse(line);
+                empCollection.Add(empInstance);
+            }
+            catch (ArgumentNullException ex)
+            {
+                Console.WriteLine($"\tRecord Error: {ex.Message}");
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                Console.WriteLine($"\tRecord Error: {ex.Message}");
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine($"\tRecord Error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"\tRecord Error: {ex.Message}");
+            }
+        }
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine(e.Message);
     }
 
     return empCollection;
