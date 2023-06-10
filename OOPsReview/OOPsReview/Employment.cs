@@ -1,4 +1,6 @@
-﻿namespace OOPsReview
+﻿using System.Text.Json.Serialization;
+
+namespace OOPsReview
 {
     public class Employment
     {
@@ -70,6 +72,11 @@
 
         // auto-implemented property
         public DateTime StartDate { get; private set; }
+
+        /*
+        [JsonInclude]
+        public string PublicDataMemberNotProperty;
+        */
 
         // default constructor
         public Employment()

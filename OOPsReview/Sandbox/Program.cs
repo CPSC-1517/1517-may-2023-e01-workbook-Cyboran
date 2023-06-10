@@ -1,8 +1,77 @@
 ﻿using OOPsReview;
+using System.Text.Json;
+
 // Check Don's video for what he did here, something to do with RecordSample() and RefactorSample()
 //RecordSample();
 //RefactorSample();
-FileIOCSV();
+//FileIOCSV();
+
+// json I/O example
+Person me = CreatePerson();
+// file path "C:\Temp\PersonData.txt"
+string filePath = @"C:\Temp\PersonData.json";
+
+DisplayPerson(me);
+SaveAsJSON(me, filePath);
+Person jsonMe = ReadJSON(filePath);
+DisplayPerson(jsonMe);
+
+Person CreatePerson()
+{
+    Residence home = new Residence(20, "Catalina Court", "Fort Sasketchewan", "AB", "T8L0E9");
+    List<Employment> emps = ReadEmploymentCollectionFromCSV();
+    Person person = new Person("Rion", "Murphy", home, emps);
+
+    return person;
+}
+void DisplayPerson(Person person)
+{
+    Console.WriteLine("\nPerson Data -\n");
+    Console.WriteLine($"Name: {person.FullName}");
+    Console.WriteLine($"Address: {person.Address}");
+    Console.WriteLine($"\nEmployments:");
+    foreach (var item in person.EmploymentPositions)
+    {
+        Console.WriteLine($"\t{item.ToString()}");
+    }
+    Console.WriteLine($"");
+}
+void SaveAsJSON(Person person, string filePath)
+{
+    // serialization is used to write to json
+    // classes within are serializers
+    // json is good at using objects and properties, needs prompting to work with fields using annotations(attributes)
+    // field declaration is [JsonInclude] and the namespace System.Text.Json.Serialization;
+
+    // creating options for serialization
+    JsonSerializerOptions options = new JsonSerializerOptions
+    {
+        WriteIndented = true,
+        IncludeFields = true    // used for non-public fields of a class
+    };
+
+    // putting the Serialize<DataType> to the class definition converts it into a json string
+    string jsonString = JsonSerializer.Serialize<Person>(person, options);
+
+    // writing jsonString to a json text file
+    File.WriteAllText(filePath, jsonString);
+}
+Person ReadJSON(string filePath)
+{
+    Person person = null;
+    try
+    {
+        string jsonString = File.ReadAllText(filePath);
+
+        // de-serialize to unpack jsonString
+        person = JsonSerializer.Deserialize<Person>(jsonString);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex.Message);
+    }
+    return person;
+}
 void RecordSample()
 {
     // example of using a record
