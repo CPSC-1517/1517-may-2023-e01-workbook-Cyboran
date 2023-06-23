@@ -1,0 +1,82 @@
+﻿@page
+@model WebAppCPSC1517.Pages.Samples.BasicDataManagementModel
+@{
+    ViewData["Title"] = "Basic Data Management";
+
+}
+
+<h1>Basic Data Management</h1>
+
+<blockquote>This page will be exploring the most common controls that is used on a form. There will be  multiple buttons(events) to code in the PageModel(aka Code-Behind). The controls will be a mix of labels, input, select, textarea, checkbox, radio, and buttons.</blockquote>
+
+@*
+    Controls are labels, input, select, textarea and buttons
+
+    Labels <label> do not need arguments and can have helper tags (asp-for, asp-attributes, asp-validation-for), depending on css the looks of the label can be changed.
+
+    Inputs <input> are your major control type to use for data input and can be set to various datatypes by making use of the attribute-type="type". This can also be tied to a property by using asp-for="property", where property = the property on PageModel. Additionally for a number type input, a step attribute can be used to help increment numbers as well as specify the amount of decimal places.
+
+    Textarea <textarea> are used to accept form input for large amounts of text and can be tied to a property on the PageModel, similar to input. Can adjust rows and cols to customize the size of the text box. Typically used for comments or answers.
+
+    Select <select> is used to accept form input for a list of items. Some other terms this may have is  combobox, dropdownlist, selectionlist. This requires a paired tag set.
+
+    Option <option> is used to define each item in the list and can have an optional "prompt line" which would be the first line in the list. This tag requires a paired tag set and can have a value attribute that can be returned to PageModel. Each line in the list is a seperate option tag, it can be coded with a hard-coded value or logically load from a collection of data. 
+    
+    The syntax for option is as follows:
+        <option value="value">text</option>
+    value is returned to PageModel, this can be omitted if you are not using the value attribute. In this case, the return value will be the text displayed in the list.
+
+    The following is a setup to allow the display of recorded errors within PageModel when using ModelState. The method for saving errors is .AddModelError("text"), this will automatically format your errors in a list.
+*@
+
+<div asp-validation-summary="All" >
+    @if (ModelState.ErrorCount > 0)
+    {
+        <p>Please review the following errors. Please edit your entries and resubmit.</p>
+        <br/>
+    }
+
+    @if (Model.ErrorList.Count() > 0)
+    {
+        <p>Please review the following errors. Please edit your entries and resubmit.</p>
+        <ul>
+            @foreach(var error in Model.ErrorList)
+            {
+                <l1>@error</l1>
+            }
+        </ul>
+    }
+</div>
+
+<form method="post">
+    <label>
+        Enter a number:
+        <input type="number" asp-for="Num" step="0.01"/> <!-- This has been now tied to the Num property in the cs file -->
+    </label>
+    <label>
+        TextArea for large amounts of text (comments or similar):
+        <textarea asp-for="MassText" rows="5" cols="60"></textarea>
+    </label>
+    <label>
+        Select a favorite course from the list:
+        <select asp-for="FaveCourse">
+            <option value="1012">CPSC 1012 - Programming Fundamentals</option>
+            <option value="1517">CPSC 1517 - Introduction to Web Applications</option>
+            <option value="2027">DMIT 2027 - Project Essentials</option>
+            <option value="2507">DMIT 2507 - Business Intelligence</option>
+        </select>
+    </label>
+    <label>
+        Select a favorite course from the list:
+        <select asp-for="FaveCourseNoValue">
+            <option>CPSC 1012 - Programming Fundamentals</option>
+            <option>CPSC 1517 - Introduction to Web Applications</option>
+            <option>DMIT 2027 - Project Essentials</option>
+            <option>DMIT 2507 - Business Intelligence</option>
+        </select>
+    </label>
+    <br /><br />
+    <button type="submit" asp-page-handler="ControlProcessing">Submit Form Data</button>
+</form>
+<br /><br />
+Processing Results: @Model.FeedBack

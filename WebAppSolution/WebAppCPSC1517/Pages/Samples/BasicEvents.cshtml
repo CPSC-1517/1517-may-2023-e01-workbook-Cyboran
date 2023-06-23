@@ -1,0 +1,37 @@
+﻿@page
+@model WebAppCPSC1517.Pages.Samples.BasicEventsModel
+@{
+    // inside the @ block uses C# coding, if @ has the {} then it is a C# coding block if it doesn't have the {} then it is C# for that statement/line only
+    // setting the tab title
+    ViewData["Title"] = "Basic Events";
+
+}
+<!-- From here it uses html coding -->
+<h1>Razor Page Event Basics</h1>
+
+<!-- Swapping back to C# coding -->
+@if(!string.IsNullOrWhiteSpace(Model.Feedback))
+{ //swapping to html for paragraph tag then swapping back to C# for reference to Model.Feedback then swapping back to html to close tag
+    <p>@Model.Feedback</p>
+}
+
+@*
+    arguments for form tag - method indicates how data is transferred to server
+                              get is visible on URL in plain text
+                              post is not visible on URL, embedded in the form object sent to the server
+
+                             action directs the server to the page to process the form if the value is      missing or  "" then it redirects to the same page, but can be a relative or    absolute URL
+
+    arguments for button tag - types
+                                submit sends the form to the server for processing
+                                reset clears the form and does not send to server
+                                button?
+
+    Events on a page, OnGet() executes when the page is first created and if method="get" is specified in the form tag. OnPost() executes when the form is submitted and is the default event if nothing else is specified by asp-page-handler. OnPost<eventname>() is similar to OnPost() however it executes if asp-page-handler specifies the eventname in the button tag. Typically used when there are multiple buttons on the form. Using an asp-page-handler overrides the default OnPost event, executing the eventname instead.
+*@
+<form method="post">
+    <button type="submit" asp-page-handler="FirstButton">Press me (Submit form to default OnPost event code)</button>
+    <!-- to create white space between objects, use &nbsp; -->
+    &nbsp;&nbsp;
+    <button type="submit" asp-page-handler="SecondButton">Press me (Submit form to OnPostSecondButton event code)</button>
+</form>
