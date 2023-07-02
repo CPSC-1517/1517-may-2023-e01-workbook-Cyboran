@@ -1,0 +1,68 @@
+﻿@page
+@model WebAppCPSC1517.Pages.Samples.StudentMarkReportModel
+@{
+    ViewData["Title"] = "File IO - Read";
+}
+<h1>File IO - Read</h1>
+
+<div asp-validation-summary="All">
+    @if (ModelState.ErrorCount > 0)
+    {
+        <p>Please review the following errors. Please edit your entries and resubmit. (Validation Summary)</p>
+        <br />
+    }
+</div>
+
+@if(Model.HasFeedBack) 
+{
+    <p>@Model.FeedBack</p>
+}
+
+@*
+demo of a tabular (table) display -
+check that we have an instance of a collection and if not, referencing the property causes an abort. Also check to see if we have something to display and display the content or error dependent on content.
+*@
+
+@if (Model.studentMarks != null)
+{
+    if (Model.studentMarks.Count() == 0)
+    {
+        <p>There is no data available to view.</p>
+    }
+    else
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Assessment</th>
+                    <th>Assessment Version</th>
+                    <th>Grade</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var item in Model.studentMarks)
+                {
+                    <tr>
+                        <td>
+                            @item.FirstName
+                        </td>
+                        <td>
+                            @item.LastName
+                        </td>
+                        <td>
+                            @item.Assessment
+                        </td>
+                        <td>
+                            @item.AssessmentVersion
+                        </td>
+                        <td>
+                            @item.Mark
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}
